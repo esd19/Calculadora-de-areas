@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Áreas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app" class="App">
+  <h1>Calculadora de Áreas</h1>
+  <select id="formaSelect">
+    <option value="">Selecciona una forma</option>
+    <option value="circulo">Círculo</option>
+    <option value="triangulo">Triángulo</option>
+    <option value="cuadrado">Cuadrado</option>
+  </select>
+  <div id="inputs"></div>
+  <button id="calcularButton">Calcular Área</button>
+  <div id="resultado"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const formaSelect = document.getElementById('formaSelect');
+    const inputsContainer = document.getElementById('inputs');
+    const calcularButton = document.getElementById('calcularButton');
+    const resultadoDiv = document.getElementById('resultado');
+
+    let forma = '';
+    let radio = 0;
+    let base = 0;
+    let altura = 0;
+    let area = 0;
+
+    formaSelect.addEventListener('change', function (e) {
+      forma = e.target.value;
+      renderInputs();
+    });
+
+    calcularButton.addEventListener('click', calcularArea);
+
+    function calcularArea() {
+      let nuevaArea = 0;
+      switch (forma) {
+        case 'circulo':
+          nuevaArea = Math.PI * Math.pow(radio, 2);
+          break;
+        case 'triangulo':
+          nuevaArea = (base * altura) / 2;
+          break;
+        case 'cuadrado':
+          nuevaArea = Math.pow(base, 2);
+          break;
+        default:
+          nuevaArea = 0;
+      }
+      area = nuevaArea;
+      renderResultado();
+    }
+
+    function renderInputs() {
+      inputsContainer.innerHTML = '';
+      if (forma === 'circulo' || forma === 'triangulo') {
+        const label = document.createElement('label');
+        label.textContent = forma === 'circulo' ? 'Radio: ' : 'Base: ';
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = forma === 'circulo' ? radio : base;
+        input.addEventListener('input', function (e) {
+          if (forma === 'circulo') {
+            radio = e.target.value;
+          } else {
+            base = e.target.value;
+          }
+        });
+        label.appendChild(input);
+        inputsContainer.appendChild(label);
+      }
+      if (forma === 'triangulo' || forma === 'cuadrado') {
+        const label = document.createElement('label');
+        label.textContent = forma === 'triangulo' ? 'Altura: ' : 'Lado: ';
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = forma === 'triangulo' ? altura : base;
+        input.addEventListener('input', function (e) {
+          if (forma === 'triangulo') {
+            altura = e.target.value;
+          } else {
+            base = e.target.value;
+          }
+        });
+        label.appendChild(input);
+        inputsContainer.appendChild(label);
+      }
+    }
+
+    function renderResultado() {
+      resultadoDiv.innerHTML = '';
+      if (area > 0) {
+        const h2 = document.createElement('h2');
+        h2.textContent = `El área del ${forma} es: ${area}`;
+        resultadoDiv.appendChild(h2);
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
